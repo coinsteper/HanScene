@@ -163,12 +163,14 @@ namespace WindowsFormsApp1
             {
                 string a = listView1.SelectedItems[0].Text;
                 ImgPath = textBox2.Text + "\\" + a;
-            }          
-            
+            }            
 
             String img_folder_name = ImgPath + "\\sensor_raw_data\\camera";
-            
+
             System.IO.DirectoryInfo di = new System.IO.DirectoryInfo(img_folder_name);
+            if (di.Exists == false)
+                return;
+
             int i = 0;
             foreach (System.IO.FileInfo File in di.GetFiles())
             {
@@ -314,8 +316,7 @@ namespace WindowsFormsApp1
             fdlg.Title = "엑셀 데이터 불러오기";
             fdlg.Filter = "All files (*.*)|*.*";
             fdlg.RestoreDirectory = true;
-
-            
+                        
 
             using (var stream = File.Open(fname, FileMode.Open, FileAccess.Read))
             {
@@ -330,13 +331,10 @@ namespace WindowsFormsApp1
                         }
                     });
 
-                    MessageBox.Show(result.Tables[0].ToString());
-                    
+                    MessageBox.Show(result.Tables[0].ToString());                    
                 }
-            }
-             
-            
-            
+            }            
+                        
                         //dataGridView1.RowHeadersVisible = false; //왼쪽 화살표 제거
                         //dataGridView1.DataSource = result.Tables[0]; //엑셀파일의 첫번째 Table을 가져온다
 
@@ -345,6 +343,90 @@ namespace WindowsFormsApp1
         private void Form1_FormClosing(object sender, FormClosingEventArgs e)
         {
             // saveExcel()
+        }
+
+        private void radioButton1_CheckedChanged(object sender, EventArgs e)
+        {
+            radioButton_control();
+        }
+
+        private void radioButton2_CheckedChanged(object sender, EventArgs e)
+        {
+            radioButton_control();
+        }
+
+        private void radioButton3_CheckedChanged(object sender, EventArgs e)
+        {
+            radioButton_control();
+        }
+
+        private void radioButton4_CheckedChanged(object sender, EventArgs e)
+        {
+            radioButton_control();
+        }
+
+        private void radioButton5_CheckedChanged(object sender, EventArgs e)
+        {
+            radioButton_control();
+        }
+
+        void radioButton_control()
+        {
+            Size ss = new Size(270, 130);
+            int pictureNumber = 0;
+            if (radioButton1.Checked)
+            {
+                pictureNumber = 40;
+                ss = new Size(270, 130);
+            }
+            else if (radioButton2.Checked)
+            {
+                pictureNumber = 40;
+                ss = new Size(405, 195);
+            }
+            else if (radioButton3.Checked)
+            {
+                pictureNumber = 40;
+                ss = new Size(500, 250);
+            }
+            else if (radioButton4.Checked)
+            {
+                pictureNumber = 40;
+                ss = new Size(800, 350);
+            }
+            else if (radioButton5.Checked)
+            {
+                pictureNumber = 20;
+                ss = new Size(1200, 700);
+            }
+
+            for (int i = 0; i < 40; i++)
+            {
+                //pbName[i] = new PictureBox();
+                //pbName[i].Parent = this.flowLayoutPanel2;
+                pbName[i].Visible = false;
+                //this.Controls.Remove(pbName[i]);
+            }
+
+            for (int i = 0; i < pictureNumber; i++)
+            {
+                //pbName[i] = new PictureBox();
+
+                pbName[i].Parent = this.flowLayoutPanel1;
+                pbName[i].SizeMode = PictureBoxSizeMode.Zoom;                
+                pbName[i].Visible = true;
+                pbName[i].Size = ss;
+            }
+        }
+
+        private void flowLayoutPanel1_Paint(object sender, PaintEventArgs e)
+        {
+
+        }
+
+        private void Form1_Load(object sender, EventArgs e)
+        {
+
         }
     }
 }
