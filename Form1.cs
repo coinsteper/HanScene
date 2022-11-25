@@ -21,17 +21,16 @@ namespace WindowsFormsApp1
     {
         [DllImport("user32.dll", SetLastError = true)]
         static extern uint GetWindowThreadProcessId(IntPtr hWnd, out uint lpdwProcessId);
-
-
+        
         PictureBox[] pbName = new PictureBox[40];
-        static Excel_1.Application excelApp = null;
-        static Excel_1.Worksheet ws = null;
-        static Excel_1.Workbook wb = null;
+        
         static string sb = "";
         static bool bSaved = false;
         string[,] string_temp;
         int RowCount = 0;
-
+        static Excel_1.Application excelApp;
+        static Excel_1.Worksheet ws;
+        static Excel_1.Workbook wb;
         private BackgroundWorker backgroundWorker;
 
         public Form1()
@@ -45,7 +44,7 @@ namespace WindowsFormsApp1
                 pbName[i].SizeMode = PictureBoxSizeMode.Zoom;
                 pbName[i].DoubleClick += new EventHandler(pictureBox_Click);
             }
-
+            
             //backgroundWorker = new BackgroundWorker();
             //backgroundWorker.DoWork += new DoWorkEventHandler(BackgroundWorkerDoWork);
             //backgroundWorker.RunWorkerCompleted += new RunWorkerCompletedEventHandler(BackgroundWorkerRunWorkerCompleted);
@@ -235,19 +234,19 @@ namespace WindowsFormsApp1
             if (listView1.SelectedItems.Count == 0)
                 return;
 
-            if (textBox1.Text == "")
-            {
-                MessageBox.Show("엑셀 파일을 선택해 주세요");
-                return;
-            }
+            //if (textBox1.Text == "")
+            //{
+            //    MessageBox.Show("엑셀 파일을 선택해 주세요");
+            //    return;
+            //}
 
-            if (string_temp == null)
-            {
-                MessageBox.Show("엑셀이 로드 될때까지 잠시만 기다려 주세요");
+            //if (string_temp == null)
+            //{
+            //    MessageBox.Show("엑셀이 로드 될때까지 잠시만 기다려 주세요");
 
-                if (string_temp == null)
-                    return;
-            }
+            //    if (string_temp == null)
+            //        return;
+            //}
 
             Change_OX("O");
             go_next();
@@ -260,18 +259,18 @@ namespace WindowsFormsApp1
             if (listView1.SelectedItems.Count == 0)
                 return;
 
-            if (textBox1.Text == "")
-            {
-                MessageBox.Show("엑셀 파일을 선택해 주세요");
-                return;
-            }
+            //if (textBox1.Text == "")
+            //{
+            //    MessageBox.Show("엑셀 파일을 선택해 주세요");
+            //    return;
+            //}
 
-            if (string_temp == null)
-            {
-                MessageBox.Show("엑셀이 로드 될때까지 잠시만 기다려 주세요");
-                if (string_temp == null)
-                    return;
-            }
+            //if (string_temp == null)
+            //{
+            //    MessageBox.Show("엑셀이 로드 될때까지 잠시만 기다려 주세요");
+            //    if (string_temp == null)
+            //        return;
+            //}
 
             Change_OX("X");
             go_next();
@@ -281,6 +280,7 @@ namespace WindowsFormsApp1
 
         void Change_OX(string ox)
         {
+            /*
             for (int i = 0; i < string_temp.Length / 3; i++)
             {
                 if (listView1.SelectedItems[0].Text == string_temp[i, 0])
@@ -288,8 +288,9 @@ namespace WindowsFormsApp1
                     string_temp[i, 1] = ox;
                     break;
                 }
-            }
-                listView1.SelectedItems[0].SubItems[1].Text = ox;
+            }*/
+
+            listView1.SelectedItems[0].SubItems[1].Text = ox;
             bSaved = false;
         }
 
@@ -311,7 +312,7 @@ namespace WindowsFormsApp1
         {
             if (listView1.SelectedItems[0].Index == 0)
             {
-                MessageBox.Show("처음 입니다.");
+                MessageBox.Show("처음입니다.");
                 return;
             }
 
@@ -328,7 +329,7 @@ namespace WindowsFormsApp1
         {
             if (listView1.SelectedItems[0].Index >= listView1.Items.Count - 1)
             {
-                MessageBox.Show("마지막 입니다.");
+                MessageBox.Show("마지막입니다.");
                 return;
             }
 
@@ -383,7 +384,11 @@ namespace WindowsFormsApp1
                     excelApp = new Excel_1.Application();
 
                 excelApp.Visible = false;
-                wb = excelApp.Workbooks.Open(FilePath);
+                //wb = excelApp.Workbooks.Open(FilePath);
+                
+                Excel_1.Workbook wwb = excelApp.Workbooks.Add();
+                wwb.SaveAs(@"C:\Users\User\Documents\test_excel_1.xlsx");
+                wwb.Close();
 
                 excelApp.Visible = false;
                 excelApp.DisplayAlerts = false;
@@ -445,7 +450,9 @@ namespace WindowsFormsApp1
             try
             {
                 if (bSave)
-                    wb.Save();
+                    button7.PerformClick();
+                    //wb.Save();
+                    
 
                 GetWindowThreadProcessId(new IntPtr(excelApp.Hwnd), out excelProcessId);
                 wb.Close(false);
@@ -520,17 +527,30 @@ namespace WindowsFormsApp1
         }
         static public void WriteRange(int starti, int starty, int endi, int endy, string[,] writestring)
         {
-            if (sb == "")
-                return;
+            //if (sb == "")
+            //    return;
 
-            //ws = wb.Worksheets.Item[sb];
+            ////ws = wb.Worksheets.Item[sb];
 
-            if (ws == null)
-                return;
+            //if (ws == null)
+            //    return;
+            //Excel_1.Application excelApp = new Excel_1.Application();
+            //Excel_1.Workbook wb = excelApp.Workbooks.Add();
+            //Excel_1.Worksheet ws = wb.Worksheets.Add();
 
+            //wwb.SaveAs(@"C:\Users\User\Documents\test_excel_1.xlsx");
+            //wwb = excelApp.Workbooks.Add();
+
+
+            //Excel_1.Range range = (Excel_1.Range)ws.Range[ws.Cells[starti, starty], ws.Cells[endi, endy]];
             Excel_1.Range range = (Excel_1.Range)ws.Range[ws.Cells[starti, starty], ws.Cells[endi, endy]];
             range.Value2 = writestring;
-            wb.Save();
+            //wb.Save();
+            DateTime today = DateTime.Today;
+            DateTime nowDate = DateTime.Now;
+
+            string FileName = System.Windows.Forms.Application.StartupPath + "\\" + today.Month.ToString() + today.Day.ToString() + nowDate.Hour.ToString() + nowDate.Minute.ToString() + ".xlsx";
+            wb.SaveAs(Filename: FileName);
             bSaved = true;
         }
 
@@ -543,18 +563,22 @@ namespace WindowsFormsApp1
                 return;
             }
             */
-
+            /*
             if (excelApp == null)
                 return;
+            */
 
             bool bSave = false;
 
             /// 최근에 저장 했으면 더 물어보지 않는다.
             if (bSaved == false)
             {
-                if (MessageBox.Show("엑셀에 저장하시겠습니까?", "Excel Save", MessageBoxButtons.YesNo) == DialogResult.Yes)
+                if (listView1.Items.Count > 0)
                 {
-                    bSave = true;
+                    if (MessageBox.Show("엑셀에 저장하시겠습니까?", "Excel Save", MessageBoxButtons.YesNo) == DialogResult.Yes)
+                    {
+                        bSave = true;
+                    }
                 }
             }
 
@@ -642,20 +666,51 @@ namespace WindowsFormsApp1
 
         private void Form1_Load(object sender, EventArgs e)
         {
-            button1.PerformClick();
+            //button1.PerformClick();
+            excelApp = new Excel_1.Application();
+            wb = excelApp.Workbooks.Add();
+            ws = wb.Worksheets.Add();
+
             listView1.MultiSelect = false;
         }
 
         // save
         private void button7_Click(object sender, EventArgs e)
         {
-            if (ws == null)
+            //if (ws == null)
+            //{
+            //    MessageBox.Show("엑셀 파일을 선택해 주세요");
+            //    return;
+            //}
+
+            //WriteRange(3, 3, RowCount, 5, string_temp);
+
+            if (listView1.Items.Count == 0)
             {
-                MessageBox.Show("엑셀 파일을 선택해 주세요");
+                MessageBox.Show("폴더를 선택해 주세요");
                 return;
             }
 
-            WriteRange(3, 3, RowCount, 5, string_temp);
+            string[,] string_temp = new string[listView1.Items.Count, 3];
+
+            for (int i = 0; i < listView1.Items.Count; i++)
+            {
+                if (listView1.Items[i].SubItems[0] != null)
+                {
+                    string_temp[i, 0] = listView1.Items[i].SubItems[0].Text;
+                }
+
+                if (listView1.Items[i].SubItems[1] != null)
+                {
+                    string_temp[i, 1] = listView1.Items[i].SubItems[1].Text;
+                }
+
+                if (listView1.Items[i].SubItems[2] != null)
+                {
+                    string_temp[i, 2] = listView1.Items[i].SubItems[2].Text;
+                }
+            }
+            WriteRange(1, 1, string_temp.Length / 3, 3, string_temp);
 
             MessageBox.Show("저장 완료");
         }
@@ -819,7 +874,7 @@ namespace WindowsFormsApp1
                 //    }
                 //    break;
                 case Keys.S:
-                    {
+                        {
                         if ((keyData & Keys.Control) != 0)
                         {
                             button7.PerformClick();
@@ -831,7 +886,7 @@ namespace WindowsFormsApp1
                     {
                         if ((keyData & Keys.Control) != 0)
                         {
-                            button1.PerformClick();
+                            button10.PerformClick();
                         }
                         break;
                     }                                
@@ -843,6 +898,12 @@ namespace WindowsFormsApp1
         private void button9_Click(object sender, EventArgs e)
         {
             textBox3.Text = "";
+        }
+
+        private void button10_Click(object sender, EventArgs e)
+        {
+            string FolderPath = System.Windows.Forms.Application.StartupPath;
+            System.Diagnostics.Process.Start(@FolderPath);
         }
     }
 }
